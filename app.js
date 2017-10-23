@@ -36,6 +36,16 @@ client.on('message', message => {
     }
   }
 
+  if (command === 'purge') {                                                      //this is just copy pasted codes
+    let messagecount = parseInt(numberofmessages);
+    message.channel.fetchMessages({limit: messagecount}) //donne une collection avec les messages
+      .then(messages => message.channel.bulkDelete(messages)); //on appelle la collection 'messages', puis on demande de supprimer les messages présents dans la collection
+
+    channel.fetchMessages({limit: 10})
+      .then(messages => console.log(`Received ${messages.size} messages`))
+      .catch(console.error);
+  }
+
   if (command === 'playCancer') {
     if (!message.member.voiceChannel) return message.reply(`please be in a voice channel first!`);
     message.member.voiceChannel.join()

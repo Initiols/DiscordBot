@@ -1,10 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const ytdl = require('ytdl-core'); //npm install --save ytdl-core
-// const PersistentCollection = require("djs-collection-persistent"); //npm install --save djs-collection-persistent
-
-const config = require('./config.json')
-// const typingStartAndStop = require('./typingStartAndStop');
+const ytdl = require('ytdl-core');
+const config = require('./config.json');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
@@ -15,56 +12,7 @@ client.on('disconnect', () => {
   console.log(`${client.user.username} has disconnected!`);
 });
 
-client.on('guildMemberAdd', member => {
-  let guild = member.guild;
-  guild.defaultChannel.sendMessage(`Bienvenue, ${member.user} sur ${guild.name} !`)
-});
-
-client.on('guildCreate', guild => {
-  console.log(`New guild added : ${guild.name}, owned by ${guild.owner.user.username}`)
-});
-
-client.on('presenceUpdate', (oldMember, newMember) => {
-  let guild = newMember.guild;
-  let playRole = guild.roles.find("name", "Playing Brawlhalla");
-  if (!playRole) return;
-
-});
-
-// client.on('typingStart', (channel, user) => {
-//   channel.sendMessage(`${user} est en train d'écrire`);
-// });
-
-client.on('roleUpdate', (oldRole, newRole) => {
-  let guild = newRole.guild;
-  let devChannel = guild.channels.find("name", "dev_channel");
-  // console.log(oldRole.name + newRole.name);
-  if (oldRole.name === newRole.name) {
-    return;
-  }
-  devChannel.sendMessage(`Le rôle @${oldRole.name} a été changé en ${newRole}`);
-});
-
-client.on('roleCreate', role => {
-  let guild = role.guild;
-  let devChannel = guild.channels.find("name", "dev_channel");
-
-  devChannel.sendMessage(`Le rôle ${role} a été crée par un Admin !`)
-});
-
-client.on('roleDelete', role => {
-  let guild = role.guild;
-  let devChannel = guild.channels.find("name", "dev_channel");
-
-  devChannel.sendMessage(`Le rôle @${role.name} a été supprimé par un Admin !`)
-});
-
 client.on('message', message => {
-  // if (message.channel.id === '295491111969882133') {
-  //   message.react('👍')
-  //   message.react('👎')
-  // }
-
   if (message.author.bot) return;
   if (!message.content.startsWith(config.prefix) && !message.tts) return;
 
@@ -74,11 +22,7 @@ client.on('message', message => {
   let args = message.content.split(" ").slice(1);
 
   let guild = message.guild;
-  let devChannel = guild.channels.find("name", "dev_channel");
-  // let adminRole = guild.roles.find('name', 'Admin')
-  // let modRole = guild.roles.find('name', 'Moderator') // IDEA: il faut que admin = mod + vip + admis (etc)
-  // let vipRole = guild.roles.find('name', 'VIP')
-  // let admisRole = guild.roles.find('name', 'Admis')
+  let devChannel = guild.channels.find("name", "dev_channel");    //utiliser le config.json pour cette ligne
 
   if (message.tts) {
     if (message.content.length > 30) {
@@ -92,7 +36,7 @@ client.on('message', message => {
     }
   }
 
-  if (command === 'playCancer') { //marche pas, il faut installer FFMPEG
+  if (command === 'playCancer') {
     if (!message.member.voiceChannel) return message.reply(`please be in a voice channel first!`);
     message.member.voiceChannel.join()
       .then(connection => console.log('Connected!'))
@@ -107,7 +51,9 @@ client.on('message', message => {
     if (!voiceChannel) return message.reply(`Please be in a voice channel first!`);
     voiceChannel.join()
       .then(connnection => {
-        const stream = ytdl("https://www.youtube.com/watch?v=dQw4w9WgXcQ", { filter: 'audioonly' });
+        const stream = ytdl("https://www.youtube.com/watch?v=dQw4w9WgXcQ", {
+          filter: 'audioonly'
+        });
         const dispatcher = connnection.playStream(stream);
         dispatcher.on('end', () => voiceChannel.leave());
       });
@@ -117,7 +63,11 @@ client.on('message', message => {
     let repeat = true
     while (repeat) {
       message.channel.sendMessage('topkek')
-      message.channel.awaitMessages(filter, { max: 1, time: 60000, errors: ['time'] })
+      message.channel.awaitMessages(filter, {
+          max: 1,
+          time: 60000,
+          errors: ['time']
+        })
         .then(collected => {
           console.log('stop detected, stopping topkek')
           repeat = false
@@ -128,6 +78,57 @@ client.on('message', message => {
         })
     }
   } else
+
+  if (command === 'kick') {
+    if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.')
+
+    if (message.mentions.users.size === 0) return message.reply('Il faut mentionner le nom d\'un utilisateur !')
+
+    let kickMember = guild.member(message.mentions.users.first())
+    if (!kickMember) return message.reply('Cet utilisateur n\'a pas l\'air d\'être valide...')
+
+    kickMember.kick()
+      .then(member => {
+        message.reply(`${kickMember.user.username} a bien été kick`)
+        devChannel.sendMessage(`@everyone ${kickMember.user.username} a été kick`)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  } else
+
+  if (command === "add") {
+    let numArray = args.map(n => parseInt(n));
+    let total = numArray.reduce((p, c) => p + c);
+    message.channel.sendMessage(total);
+  } else
+
+  if (command === "roll") {
+    if (args.length > 0) {} else {
+      args.push(6);
+    }
+    var roll = Math.floor(Math.random() * args) + 1;
+
+    message.delete()
+      .catch(console.error);
+    message.reply("tu as eu un " + roll + "                    (sur " + args + ")");
+  } else
+
+  if (command === "say") {
+    message.channel.sendMessage(args.join(" "));
+  } else
+
+  if (command === "myAvatar") {
+    message.channel.sendMessage(message.author.avatarURL);
+  } else
+
+  if (command === "myID") {
+    message.channel.sendMessage(message.author.id);
+  } else
+
+  if (command === "myUsername") {
+    message.channel.sendMessage(message.author.username);
+  }
 
   if (command === 'testReactionsInterract') {
     message.channel.sendMessage("", {
@@ -180,51 +181,21 @@ client.on('message', message => {
     message.reply(`Le defi fonctionne ${defieur} vs ${défié}`)
   } else
 
-    // if (command === "TicTacToe") { // IDEA: Créer une channel 'games / jeux' quand tout est valide, que l'on supprime à la fin, on ne peut pas écrire dedans, quand c'est à notre tour de jouer / quand on nous invite a jouer, on donne le rôle 'games', ce que donne la permission de parler dedans (une fois qu'on a joué, on envèle le rôle)
-    //   if (args === message.guildMember.presence.equals('online')) {
-    //     guild.channels.find('name', 'games').sendMessage(`@${args}, vous avez été défié au Morpion par ${message.author} ! Ecrivez ci dessous O (= Oui) / N (= Non) pour accepter / refuser le défi.`);
-    //   } else {
-    //     message.channel.sendMessage('Spécifiez le nom du joueur à défier !'); // IDEA: 'Qui voulez-vous défier ?' (→ How to 'wait' for the message / How to get the message without the 'client.on('message')' ?
-    //   }
-    //
-    //   // IDEA: Wait for the guy challeged to anwser back in the next 30 seconds, if not, come back to normal (→ How to 'wait' for the message / How to get the message without the 'client.on('message')' ?
-    //
-    // } else
-
-    if (command === 'testAwait') {
-      const filter = message => message.content.startsWith('testAwait');
-      // errors: ['time'] treats ending because of the time limit as an error
-      devChannel.awaitMessages(filter, { max: 4, time: 60000, errors: ['time'] })
-        .then(collected => {
-          console.log(collected.size)
-          devChannel.sendMessage(`${collected.size} 'testAwait' obtenus, fin de l'attente`)
-        })
-        .catch(collected => {
-          console.log(`After a minute, only ${collected.size} out of 4 voted.`)
-          devChannel.sendMessage(`Après une minute, seulement ${collected.size} 'testAwait' sur 4 ont été obtenus.`)
-        })
-    } else
-
-  if (command === 'deafenEveryone') {
-    if (!message.member.roles.has(adminRole.id)) return ('Vous n\'avez pas la permission d\'utiliser cette commande.')
-    message.guild.members.forEach(member => member.setDeaf(true));
-  } else
-
-  if (command === 'kick') {
-    if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.')
-
-    if (message.mentions.users.size === 0) return message.reply('Il faut mentionner le nom d\'un utilisateur !')
-
-    let kickMember = guild.member(message.mentions.users.first())
-    if (!kickMember) return message.reply('Cet utilisateur n\'a pas l\'air d\'être valide...')
-
-    kickMember.kick()
-      .then(member => {
-        message.reply(`${kickMember.user.username} a bien été kick`)
-        devChannel.sendMessage(`@everyone ${kickMember.user.username} a été kick`)
+  if (command === 'testAwait') {
+    const filter = message => message.content.startsWith('testAwait');
+    // errors: ['time'] treats ending because of the time limit as an error
+    devChannel.awaitMessages(filter, {
+        max: 4,
+        time: 60000,
+        errors: ['time']
       })
-      .catch(e => {
-        console.log(e)
+      .then(collected => {
+        console.log(collected.size)
+        devChannel.sendMessage(`${collected.size} 'testAwait' obtenus, fin de l'attente`)
+      })
+      .catch(collected => {
+        console.log(`After a minute, only ${collected.size} out of 4 voted.`)
+        devChannel.sendMessage(`Après une minute, seulement ${collected.size} 'testAwait' sur 4 ont été obtenus.`)
       })
   } else
 
@@ -295,48 +266,7 @@ client.on('message', message => {
         disableEveryone: true
       }
     );
-  } else
-
-  if (command === "add") {
-    let numArray = args.map(n => parseInt(n));
-    let total = numArray.reduce((p, c) => p + c);
-    message.channel.sendMessage(total);
-  } else
-
-  if (command === "roll") {
-    if (args.length > 0) {} else {
-      args.push(6);
-    }
-    var roll = Math.floor(Math.random() * args) + 1;
-
-    message.delete()
-      .catch(console.error);
-    message.reply("tu as eu un " + roll + "                    (sur " + args + ")");
-  } else
-
-  if (command === "say") {
-    message.channel.sendMessage(args.join(" "));
-  } else
-
-  if (command === "ping") {
-    message.channel.sendMessage('Pong!');
-  } else
-
-  if (command === "foo") {
-    message.channel.sendMessage("bar!");
-  } else
-
-  if (command === "myAvatar") {
-    message.channel.sendMessage(message.author.avatarURL);
-  } else
-
-  if (command === "myID") {
-    message.channel.sendMessage(message.author.id);
-  } else
-
-  if (command === "myUsername") {
-    message.channel.sendMessage(message.author.username);
   }
 });
 
-client.login(config.token)
+client.login(config.token);

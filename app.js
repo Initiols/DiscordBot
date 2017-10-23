@@ -23,7 +23,7 @@ client.on('message', message => {
   let args = message.content.split(" ").slice(1);
 
   let guild = message.guild;
-  let devChannel = guild.channels.find("name", "dev_channel");
+  let devChannel = guild.channels.find("name", "dev_channel"); //utiliser le config.json pour cette ligne
 
   if (message.tts) {
     if (message.content.length > 30) {

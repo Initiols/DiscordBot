@@ -28,8 +28,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
   let guild = newMember.guild;
   let playRole = guild.roles.find("name", "Playing Brawlhalla");
   if (!playRole) return;
-
-  let IlikeTrutles = 0;
+  
 });
 
 // client.on('typingStart', (channel, user) => {

@@ -1,8 +1,7 @@
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const ytdl = require('ytdl-core');
-const config = require('./config.json')
-
+const config = require('./config.json');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
@@ -23,7 +22,7 @@ client.on('message', message => {
   let args = message.content.split(" ").slice(1);
 
   let guild = message.guild;
-  let devChannel = guild.channels.find("name", "dev_channel"); //utiliser le config.json pour cette ligne
+  let devChannel = guild.channels.find("name", "dev_channel");    //utiliser le config.json pour cette ligne
 
   if (message.tts) {
     if (message.content.length > 30) {

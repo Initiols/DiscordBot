@@ -38,7 +38,7 @@ client.on('message', message => {
 
   if (command === 'purge') {                                                      //this is just copy pasted codes
     let messagecount = parseInt(numberofmessages);
-    message.channel.fetchMessages({limit: messagecount}) //donne une collection avec les messages
+    message.channel.fetchMessages({limit: messagecount})       //donne une collection avec les messages
       .then(messages => message.channel.bulkDelete(messages)); //on appelle la collection 'messages', puis on demande de supprimer les messages présents dans la collection
 
     channel.fetchMessages({limit: 10})

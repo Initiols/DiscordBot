@@ -28,7 +28,7 @@ client.on('presenceUpdate', (oldMember, newMember) => {
   let guild = newMember.guild;
   let playRole = guild.roles.find("name", "Playing Brawlhalla");
   if (!playRole) return;
-  
+
 });
 
 // client.on('typingStart', (channel, user) => {

@@ -23,7 +23,6 @@ client.on('message', message => {
   let args = message.content.split(" ").slice(1);
   console.log(args);
 
-  let guild = message.guild;
   let devChannel = guild.channels.find("name", "bots"); //utiliser le config.json pour cette ligne
 
   if (message.tts) {
@@ -103,7 +102,7 @@ client.on('message', message => {
 
     if (message.mentions.users.size === 0) return message.reply('Il faut mentionner le nom d\'un utilisateur !')
 
-    let kickMember = guild.member(message.mentions.users.first())
+    let kickMember = message.guild.member(message.mentions.users.first())
     if (!kickMember) return message.reply('Cet utilisateur n\'a pas l\'air d\'être valide...')
 
     kickMember.kick()

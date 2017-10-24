@@ -1,0 +1,26 @@
+{
+  "name": "discobot",
+  "version": "1.0.0",
+  "description": "oui",
+  "main": "app.js",
+  "scripts": {
+    "test": "baguette"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Initiols/DiscordBot.git"
+  },
+  "keywords": [
+    "bot"
+  ],
+  "author": "Initiols",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Initiols/DiscordBot/issues"
+  },
+  "homepage": "https://github.com/Initiols/DiscordBot#readme",
+  "dependencies": {
+    "discord.js": "^11.2.1",
+    "ytdl-core": "^0.18.1"
+  }
+}

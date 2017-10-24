@@ -77,21 +77,23 @@ client.on('message', message => {
       });
   } else
 
-  if (command === 'topkek') {
-    let repeat = true
+  if (command === 'topkek') {   //commande pour spam un mot pendant 5-10 secondes  IDEA: del les msg un fois la bouche finie
+    let repeat = true;
+    const filter = message => message.content.startsWith('oui');
+    if (args.length > 0) {} else {
+      return message.reply(`Il faut donner un mot à spam`); //possibilité de faire une phrase, et pas un mot? => message.channel.send(args.join(" ")); ?
+    }
+
     while (repeat) {
-      message.channel.send('topkek')
-      message.channel.awaitMessages(filter, {
-          max: 1,
-          time: 60000,
-          errors: ['time']
-        })
+      message.channel.send(args[0]);
+      console.log("Passé par ici");
+      message.channel.awaitMessages(filter, { max: 1, time: config.maxTopkekDuration, errors: ['time']})
         .then(collected => {
-          console.log('stop detected, stopping topkek')
+          console.log('stop detected, stopping topkek'),
           repeat = false
         })
         .catch(collected => {
-          console.log(`topkek spam stopped after 1 min`)
+          console.log(`topkek spam stopped after 10 seconds`),
           repeat = false
         })
     }

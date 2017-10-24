@@ -2,5 +2,6 @@
   "prefix" : ">",
   "token" : "MzcxNzA3NzA5OTUyNjIyNTky.DNCa3Q.XBtBUe4skNtl74OKDllMJQgC4nQ",
   "minPurgeLength": 2,
-  "maxPurgeLength": 100
+  "maxPurgeLength": 100,
+  "maxTopkekDuration": 10000
 }

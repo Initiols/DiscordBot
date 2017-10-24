@@ -5,7 +5,7 @@ const config = require('./config.json');
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
-  client.channels.find('name', 'dev_channel').sendMessage('Patrick Bot s\'est connecté');
+  client.channels.find('name', 'bots').send('Patrick Bot s\'est connecté');
 });
 
 client.on('disconnect', () => {
@@ -18,11 +18,13 @@ client.on('message', message => {
 
   let command = message.content.split(" ")[0];
   command = command.slice(config.prefix.length);
+  console.log(command);
 
   let args = message.content.split(" ").slice(1);
+  console.log(args);
 
   let guild = message.guild;
-  let devChannel = guild.channels.find("name", "dev_channel");    //utiliser le config.json pour cette ligne
+  let devChannel = guild.channels.find("name", "bots"); //utiliser le config.json pour cette ligne
 
   if (message.tts) {
     if (message.content.length > 30) {
@@ -36,18 +38,25 @@ client.on('message', message => {
     }
   }
 
-  if (command === 'purge') {                                                      //this is just copy pasted codes
-    let messagecount = parseInt(numberofmessages);
-    message.channel.fetchMessages({limit: messagecount})       //donne une collection avec les messages
-      .then(messages => message.channel.bulkDelete(messages)); //on appelle la collection 'messages', puis on demande de supprimer les messages présents dans la collection
+  if (command === 'purge') {
+    if (args.length > 0) {} else {
+      return message.reply(`Il faut donner le nombre de messages à supprimer (min: \`${config.minPurgeLength}\` | max: \`${config.maxPurgeLength}\`)`);
+    }
 
-    channel.fetchMessages({limit: 10})
-      .then(messages => console.log(`Received ${messages.size} messages`))
-      .catch(console.error);
-  }
+    if (args[0] <= config.minPurgeLength) {
+      return message.reply(`Le nombre minimum de messages à supprimer est de ${config.minPurgeLength}`);
+    } else if (args[0] >= config.maxPurgeLength) {
+      return message.reply(`Le nombre maximum de messages à supprimer est de ${config.maxPurgeLength}`);
+    }
+
+    message.channel.fetchMessages({
+        limit: args[0]
+      })
+      .then(messages => message.channel.bulkDelete(messages)); //message.reply(`\`${messages.length}\` messages supprimés`));
+  } else
 
   if (command === 'playCancer') {
-    if (!message.member.voiceChannel) return message.reply(`please be in a voice channel first!`);
+    if (!message.member.voiceChannel) return message.reply(`Please be in a voice channel first!`);
     message.member.voiceChannel.join()
       .then(connection => console.log('Connected!'))
       .catch(console.error);
@@ -72,7 +81,7 @@ client.on('message', message => {
   if (command === 'topkek') {
     let repeat = true
     while (repeat) {
-      message.channel.sendMessage('topkek')
+      message.channel.sendsendMessage('topkek')
       message.channel.awaitMessages(filter, {
           max: 1,
           time: 60000,
@@ -100,7 +109,7 @@ client.on('message', message => {
     kickMember.kick()
       .then(member => {
         message.reply(`${kickMember.user.username} a bien été kick`)
-        devChannel.sendMessage(`@everyone ${kickMember.user.username} a été kick`)
+        devChannel.send(`@everyone ${kickMember.user.username} a été kick`)
       })
       .catch(e => {
         console.log(e)
@@ -110,7 +119,7 @@ client.on('message', message => {
   if (command === "add") {
     let numArray = args.map(n => parseInt(n));
     let total = numArray.reduce((p, c) => p + c);
-    message.channel.sendMessage(total);
+    message.channel.send(total);
   } else
 
   if (command === "roll") {
@@ -125,23 +134,23 @@ client.on('message', message => {
   } else
 
   if (command === "say") {
-    message.channel.sendMessage(args.join(" "));
+    message.channel.send(args.join(" "));
   } else
 
   if (command === "myAvatar") {
-    message.channel.sendMessage(message.author.avatarURL);
+    message.channel.send(message.author.avatarURL);
   } else
 
   if (command === "myID") {
-    message.channel.sendMessage(message.author.id);
+    message.channel.send(message.author.id);
   } else
 
   if (command === "myUsername") {
-    message.channel.sendMessage(message.author.username);
+    message.channel.send(message.author.username);
   }
 
   if (command === 'testReactionsInterract') {
-    message.channel.sendMessage("", {
+    message.channel.send("", {
       embed: {
         hexColor: 3447003,
         author: {
@@ -201,16 +210,16 @@ client.on('message', message => {
       })
       .then(collected => {
         console.log(collected.size)
-        devChannel.sendMessage(`${collected.size} 'testAwait' obtenus, fin de l'attente`)
+        devChannel.send(`${collected.size} 'testAwait' obtenus, fin de l'attente`)
       })
       .catch(collected => {
         console.log(`After a minute, only ${collected.size} out of 4 voted.`)
-        devChannel.sendMessage(`Après une minute, seulement ${collected.size} 'testAwait' sur 4 ont été obtenus.`)
+        devChannel.send(`Après une minute, seulement ${collected.size} 'testAwait' sur 4 ont été obtenus.`)
       })
   } else
 
   if (command === "testEmbed") {
-    message.channel.sendMessage("", {
+    message.channel.send("", {
       embed: {
         hexColor: 3447003,
         author: {
@@ -270,7 +279,7 @@ client.on('message', message => {
       .addField('\u200b', '\u200b', true)
       .addField('Second (3rd place) Inline Field', 'I\'m in the ZOONE', true);
 
-    message.channel.sendEmbed(
+    message.channel.send(
       embed,
       'this is some content but nobody cares', {
         disableEveryone: true

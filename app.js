@@ -81,7 +81,7 @@ client.on('message', message => {
   if (command === 'topkek') {
     let repeat = true
     while (repeat) {
-      message.channel.sendsendMessage('topkek')
+      message.channel.send('topkek')
       message.channel.awaitMessages(filter, {
           max: 1,
           time: 60000,

@@ -79,7 +79,6 @@ client.on('message', message => {
 
   if (command === 'repeat') {   //commande pour spam un mot pendant config.maxTopkekDuration millisecondes  IDEA: del les msg un fois la bouche finie
     let repeat = true;
-    const filter = message => message.content.startsWith('oui');
     if (args.length > 0) {} else {
       return message.reply(`Il faut donner un mot à spam`); //possibilité de faire une phrase, et pas un mot? => message.channel.send(args.join(" ")); ?
     }
@@ -87,7 +86,7 @@ client.on('message', message => {
     while (repeat) {
       message.channel.send(args[0]); //n'envoie rien du tout
       console.log("Passé par ici");
-      message.channel.awaitMessages(filter, { max: 1, time: config.maxTopkekDuration, errors: ['time']})
+      message.channel.awaitMessages(message => message.content.startsWith('oui'), { max: 1, time: config.maxTopkekDuration, errors: ['time']})
         .then(collected => {
           console.log('stop detected, stopping repeating stuff'),
           repeat = false

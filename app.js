@@ -42,10 +42,10 @@ client.on('message', message => {
       return message.reply(`Il faut donner le nombre de messages à supprimer (min: \`${config.minPurgeLength}\` | max: \`${config.maxPurgeLength}\`)`);
     }
 
-    if (args[0] <= config.minPurgeLength) {
-      return message.reply(`Le nombre minimum de messages à supprimer est de ${config.minPurgeLength}`);
-    } else if (args[0] >= config.maxPurgeLength) {
-      return message.reply(`Le nombre maximum de messages à supprimer est de ${config.maxPurgeLength}`);
+    if (args[0] < config.minPurgeLength) {
+      return message.reply(`Le nombre minimum de messages à supprimer est de \`${config.minPurgeLength}\``);
+    } else if (args[0] > config.maxPurgeLength) {
+      return message.reply(`Le nombre maximum de messages à supprimer est de \`${config.maxPurgeLength}\``);
     }
 
     message.channel.fetchMessages({

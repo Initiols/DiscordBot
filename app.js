@@ -218,6 +218,18 @@ client.on('message', message => {
       })
   } else
 
+  if (command === 'testTTS') {
+    message.channel.send('TOPKEK', {tts: true})
+  } else
+
+  if (command === 'testMESSAGEDisableEveryone') {
+
+  } else
+
+  if (command === 'testMESSAGESplit') {
+
+  } else
+
   if (command === "testEmbed") {
     message.channel.send("", {
       embed: {

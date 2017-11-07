@@ -1,7 +1,10 @@
 const Discord = require("discord.js");
-const client = new Discord.Client();
 const ytdl = require('ytdl-core');
 const config = require('./config.json');
+
+const client = new Discord.Client();
+
+
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);

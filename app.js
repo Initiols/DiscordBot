@@ -41,6 +41,22 @@ client.on('message', message => {
     }
   }
 
+  if (command === 'messagetoembed') {
+    message.channel.send(
+      new Discord.RichEmbed()
+      .setTitle('Very Nice Title')
+      .setAuthor('Author Name', 'https://goo.gl/os8xgU', 'https://darkeyegod.com/media/4yh4gewu5u32r.png') //dernier link est le lien clickable, le deuxième est la photo du lien
+      .setColor(message.author.displayHexColor)
+      .setDescription('The text of the body, essentially')
+      .setFooter('Nice text at the bottom', 'https://goo.gl/32dztg') //photo Pickle avec le lien
+      .setImage('https://goo.gl/D3uKk2') //grosse photo au milieu
+      .setThumbnail('https://goo.gl/lhc6ke') //en haut à droite
+      .setTimestamp()
+      .setURL('https://discord.js.org/#/docs/main/indev/class/RichEmbed')
+      .addField('Field Title', 'Field Value')
+    );
+  } else
+
   if (command === 'purge') {
     if (args.length > 0) {} else {
       return message.reply(`Il faut donner le nombre de messages à supprimer (min: \`${config.minPurgeLength}\` | max: \`${config.maxPurgeLength}\`)`);
@@ -309,3 +325,7 @@ client.on('message', message => {
 });
 
 client.login(config.token);
+
+/*
+https://goo.gl/32dztg = lien photo Pickle
+*/

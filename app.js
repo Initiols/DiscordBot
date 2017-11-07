@@ -20,10 +20,11 @@ client.on('message', message => {
   if (!message.content.startsWith(config.prefix) && !message.tts) return;
 
   let command = message.content.split(" ")[0];
-  command = command.slice(config.prefix.length);
-  console.log(command);
+  command = command.slice(config.prefix.length).toLowerCase();
 
   let args = message.content.split(" ").slice(1);
+
+  console.log(command);
   console.log(args);
 
   let devChannel = message.guild.channels.find("name", "bots"); //utiliser le config.json pour cette ligne
@@ -33,9 +34,9 @@ client.on('message', message => {
       message.delete()
       message.reply('NO CANCER PLEASE (pas de /tts a plus de 30 charactères)')
       message.reply('Vous ne pouvez plus envoyer de /tts pendant les 5 prochaines minutes.')
-      message.member.removeRole('281768979033358338');
+      message.member.removeRole('281768979033358338'); //changer les ID des rôles
       setTimeout(function() {
-        message.member.addRole('281768979033358338');
+        message.member.addRole('281768979033358338'); //changer les ID des rôles
       }, 300000); //ajouter un await pour envoyer un message @user quand il retrouve le rôle
     }
   }
@@ -57,7 +58,7 @@ client.on('message', message => {
       .then(messages => message.channel.bulkDelete(messages)); //message.reply(`\`${messages.length}\` messages supprimés`));
   } else
 
-  if (command === 'playCancer') {
+  if (command === 'playcancer') {
     if (!message.member.voiceChannel) return message.reply(`Please be in a voice channel first!`);
     message.member.voiceChannel.join()
       .then(connection => console.log('Connected!'))
@@ -102,7 +103,7 @@ client.on('message', message => {
   } else
 
   if (command === 'kick') {
-    if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.')
+    if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.') //changer les ID des rôles
 
     if (message.mentions.users.size === 0) return message.reply('Il faut mentionner le nom d\'un utilisateur !')
 
@@ -133,26 +134,52 @@ client.on('message', message => {
 
     message.delete()
       .catch(console.error);
-    message.reply("tu as eu un " + roll + "                    (sur " + args + ")");
+    message.reply(`Tu as eu un \`${roll}\`                     (sur \`${args}\`)`);
   } else
 
   if (command === "say") {
     message.channel.send(args.join(" "));
   } else
 
-  if (command === "myAvatar") {
-    message.channel.send(message.author.avatarURL);
+  if (command === "avatar") {
+    let oui;
+    if (message.mentions.users.size === 0) {
+      oui = message.author.avatarURL;
+    } else oui = message.mentions.users.first().avatarURL;
+    message.channel.send(oui);
   } else
 
-  if (command === "myID") {
-    message.channel.send(message.author.id);
+  if (command === "id") {
+    let oui;
+    if (message.mentions.users.size === 0) {
+      oui = message.author.id;
+    } else {
+      oui = message.mentions.users.first().id;
+    }
+    message.channel.send(oui);
   } else
 
-  if (command === "myUsername") {
-    message.channel.send(message.author.username);
+  if (command === "username") {
+    let oui;
+    if (message.mentions.users.size === 0) {
+      oui = message.author.username;
+    } else oui = message.mentions.users.first().username;
+    message.channel.send(oui);
   }
 
-  if (command === 'testReactionsInterract') {
+  if (command === 'testtts') {
+    message.channel.send('TOPKEK', { tts: true })
+  } else
+
+  if (command === 'testdisableeveryone') {
+    message.channel.send('TOPKEK', { disableEveryone: true })
+  } else
+
+  if (command === 'testsplit') {
+    message.channel.send('TOPKEK', { split: true }) //message pas du tout assez long xddddd
+  } else
+
+  if (command === 'testreactionsinterract') {
     message.channel.send("", {
       embed: {
         hexColor: 3447003,
@@ -183,13 +210,13 @@ client.on('message', message => {
     // if (message.reactions.size)
   } else
 
-  if (command === 'testStatus') {
+  if (command === 'teststatus') {
     if (message.mentions.users.size === 0) return message.reply('Il faut mentioner un utilisateur (@ devant)')
     let mentionned = message.mentions.users.first()
     message.reply(`${mentionned} is ${mentionned.presence.status}`)
   } else
 
-  if (command === 'testDefi') {
+  if (command === 'testdefi') {
     if (message.mentions.users.size === 0) return message.reply('Il faut mentioner un utilisateur (@ devant)')
     let defieur = message.author
     let défié = message.mentions.users.first()
@@ -203,7 +230,7 @@ client.on('message', message => {
     message.reply(`Le defi fonctionne ${defieur} vs ${défié}`)
   } else
 
-  if (command === 'testAwait') {
+  if (command === 'testawait') {
     const filter = message => message.content.startsWith('testAwait');
     // errors: ['time'] treats ending because of the time limit as an error
     devChannel.awaitMessages(filter, {
@@ -221,19 +248,7 @@ client.on('message', message => {
       })
   } else
 
-  if (command === 'testTTS') {
-    message.channel.send('TOPKEK', { tts: true })
-  } else
-
-  if (command === 'testMESSAGEDisableEveryone') {
-
-  } else
-
-  if (command === 'testMESSAGESplit') {
-
-  } else
-
-  if (command === "testEmbed") {
+  if (command === "testembed") {
     message.channel.send({
       embed: {
         color: 3447003,
@@ -266,7 +281,7 @@ client.on('message', message => {
     });
   } else
 
-  if (command === "testRichEmbed") {
+  if (command === "testrichembed") {
     const embed = new Discord.RichEmbed()
       .setTitle('Very Nice Title')
       .setAuthor('Author Name', 'https://goo.gl/rHndF5')

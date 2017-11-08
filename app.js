@@ -42,19 +42,15 @@ client.on('message', message => {
   }
 
   if (command === 'messagetoembed') {
-    message.channel.send(
+    message.channel.send(message.author,
       new Discord.RichEmbed()
-      .setTitle('Very Nice Title')
-      .setAuthor('Author Name', 'https://goo.gl/os8xgU', 'https://darkeyegod.com/media/4yh4gewu5u32r.png') //dernier link est le lien clickable, le deuxième est la photo du lien
-      .setColor(message.author.displayHexColor)
-      .setDescription('The text of the body, essentially')
-      .setFooter('Nice text at the bottom', 'https://goo.gl/32dztg') //photo Pickle avec le lien
-      .setImage('https://goo.gl/D3uKk2') //grosse photo au milieu
-      .setThumbnail('https://goo.gl/lhc6ke') //en haut à droite
+      .setAuthor(message.author.username, message.author.avatarURL)
+      .setColor(message.member.displayColor)
+      .setDescription(args.join(" "))
+      .setFooter('Brought to you by Pickle', 'https://goo.gl/32dztg')
       .setTimestamp()
-      .setURL('https://discord.js.org/#/docs/main/indev/class/RichEmbed')
-      .addField('Field Title', 'Field Value')
     );
+    message.delete();
   } else
 
   if (command === 'purge') {

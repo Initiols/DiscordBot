@@ -8,7 +8,7 @@ const client = new Discord.Client();
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
-  client.channels.find('name', 'bots').send('Patrick Bot s\'est connecté');
+  client.channels.find('name', 'bot').send(`${client.user.username} s\'est connecté`);
 });
 
 client.on('disconnect', () => {

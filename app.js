@@ -16,19 +16,6 @@ client.on('disconnect', () => {
 });
 
 client.on('message', message => {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(config.prefix) && !message.tts) return;
-
-  let command = message.content.split(" ")[0];
-  command = command.slice(config.prefix.length).toLowerCase();
-
-  let args = message.content.split(" ").slice(1);
-
-  console.log(command);
-  console.log(args);
-
-  let devChannel = message.guild.channels.find("name", "bots"); //utiliser le config.json pour cette ligne
-
   if (message.tts) {
     if (message.content.length > 30) {
       message.delete()
@@ -40,6 +27,39 @@ client.on('message', message => {
       // }, 300000); //ajouter un await pour envoyer un message @user quand il retrouve le rôle
     }
   }
+
+  if (message.guild.id === '378232019102072833' && message.channel.name === 'screenshots') {
+    if (message.attachments.size === 0) {
+      message.react('🚫')
+      setTimeout(function() {
+        message.delete();
+        message.guild.channels.get('378232019684950018').send(
+          new Discord.RichEmbed()
+          .setThumbnail(message.author.avatarURL)
+          .addField('Auteur', message.author, true)
+          .addField('Channel', message.guild.channels.find('name', 'screenshots'), true)
+          .addField('Message', message.content, true)
+          .setColor(message.member.displayColor)
+          .setFooter('Message déplacé car il ne contenait pas de screenshot', 'https://goo.gl/32dztg')
+        );
+      }, 3000);
+    } else {
+      message.react('✅');
+    }
+  }
+
+  if (message.author.bot) return;
+  if (!message.content.startsWith(config.prefix)) return;
+
+  let command = message.content.split(" ")[0];
+  command = command.slice(config.prefix.length).toLowerCase();
+
+  let args = message.content.split(" ").slice(1);
+
+  console.log(command);
+  console.log(args);
+
+  let devChannel = message.guild.channels.find("name", "bots"); //utiliser le config.json pour cette ligne ?
 
   if (command === 'messagetoembed') {
     message.channel.send(message.author,
@@ -114,24 +134,6 @@ client.on('message', message => {
     }
   } else
 
-  if (command === 'kick') {
-    if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.') //changer les ID des rôles
-
-    if (message.mentions.users.size === 0) return message.reply('Il faut mentionner le nom d\'un utilisateur !')
-
-    let kickMember = message.guild.member(message.mentions.users.first())
-    if (!kickMember) return message.reply('Cet utilisateur n\'a pas l\'air d\'être valide...')
-
-    kickMember.kick()
-      .then(member => {
-        message.reply(`${kickMember.user.username} a bien été kick`)
-        devChannel.send(`@everyone ${kickMember.user.username} a été kick`)
-      })
-      .catch(e => {
-        console.log(e)
-      })
-  } else
-
   if (command === "add") {
     let numArray = args.map(n => parseInt(n));
     let total = numArray.reduce((p, c) => p + c);
@@ -178,6 +180,24 @@ client.on('message', message => {
     } else oui = message.mentions.users.first().username;
     message.channel.send(oui);
   }
+
+  if (command === 'kick') {
+    if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.') //changer les ID des rôles
+
+    if (message.mentions.users.size === 0) return message.reply('Il faut mentionner le nom d\'un utilisateur !')
+
+    let kickMember = message.guild.member(message.mentions.users.first())
+    if (!kickMember) return message.reply('Cet utilisateur n\'a pas l\'air d\'être valide...')
+
+    kickMember.kick()
+      .then(member => {
+        message.reply(`${kickMember.user.username} a bien été kick`)
+        devChannel.send(`@everyone ${kickMember.user.username} a été kick`)
+      })
+      .catch(e => {
+        console.log(e)
+      })
+  } else
 
   if (command === 'testtts') {
     message.channel.send('TOPKEK', { tts: true })

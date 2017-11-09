@@ -324,4 +324,5 @@ client.login(config.token);
 
 /*
 https://goo.gl/32dztg = lien photo Pickle
+https://discordapp.com/oauth2/authorize?client_id=371707709952622592&scope=bot&permissions=1 = lien pour inviter le bot
 */

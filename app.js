@@ -265,7 +265,7 @@ client.on('message', message => {
   if (command === 'testawait') {
     const filter = message => message.content.startsWith('testAwait');
     // errors: ['time'] treats ending because of the time limit as an error
-    devChannel.awaitMessages(filter, {
+    devChannel.awaitMessages(filter, { //attention à devChannel
         max: 4,
         time: 60000,
         errors: ['time']

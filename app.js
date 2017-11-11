@@ -73,7 +73,7 @@ client.on('message', message => {
     message.delete();
   } else
 
-  if (command === 'purge') {
+  if (command === 'purge') { //ajouter test avec les réactions pour confirmer la demande de purge
     if (args.length > 0) {} else {
       return message.reply(`Il faut donner le nombre de messages à supprimer (min: \`${config.minPurgeLength}\` | max: \`${config.maxPurgeLength}\`)`);
     }

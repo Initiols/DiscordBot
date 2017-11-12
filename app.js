@@ -43,7 +43,7 @@ client.on("message", async message => {
           .setColor(message.member.displayColor)
           .setFooter('Message déplacé car il ne contenait pas de screenshot', 'https://goo.gl/32dztg')
         );
-      }, 3000);
+      }, 1500);
     } else {
       message.react('✅');
     }

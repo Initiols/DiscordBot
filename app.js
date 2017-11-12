@@ -80,7 +80,7 @@ client.on("message", async message => {
   } else
 
   if (command === 'purge') {
-    if (args.length <= 0 || args[0] < config.minPurgeLength || args[0] > config.maxPurgeLength) return message.reply(`Il faut donner un nombre entre \`${config.minPurgeLength}\` et \`${config.maxPurgeLength}\` de messages à supprimer`)
+    if (args.length === 0 || args[0] < config.minPurgeLength || args[0] > config.maxPurgeLength) return message.reply(`Il faut donner un nombre entre \`${config.minPurgeLength}\` et \`${config.maxPurgeLength}\` de messages à supprimer`)
 
     message.channel.send(`Vous allez supprimer \`${args[0]}\` messages (sans compter la commande et ce message)`, { reply: message.author })
       .then(msg => {

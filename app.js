@@ -93,13 +93,11 @@ client.on("message", async message => {
             }, { time: 15000 });
             collector.on('collect', reaction => {
               if (reaction.emoji.name === '🚫' && reaction.count > 1) {
-                console.log('NON');
                 msg.delete();
                 message.delete();
                 return;
               }
               if (reaction.emoji.name === '✅' && reaction.count > 1) {
-                console.log('OUI');
                 msg.delete().then(z1 => {
                   message.delete().then(z2 => {
                     message.channel.fetchMessages({

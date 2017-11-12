@@ -9,7 +9,7 @@ const client = new Discord.Client();
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
   client.channels.find('name', 'bot').send(`${client.user.username} s\'est connecté`);
-  client.user.setGame('Ready to fuck you up!');
+  client.user.setGame('prefix: >');
 });
 
 client.on('disconnect', () => {

@@ -119,7 +119,7 @@ client.on("message", async message => {
       });
   } else
 
-  if (command === 'repeat') { //commande pour spam un mot pendant config.maxTopkekDuration millisecondes  IDEA: del les msg un fois la bouche finie
+  if (command === 'repeat') { //commande pour spam un mot pendant config.maxTopkekDuration millisecondes  IDEA: del les msg une fois la boucle finie
     let repeat = true;
     if (args.length > 0) {} else {
       return message.reply(`Il faut donner un mot à spam`); //possibilité de faire une phrase, et pas un mot? => message.channel.send(args.join(" ")); ?

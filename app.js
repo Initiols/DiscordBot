@@ -191,31 +191,35 @@ client.on("message", async message => {
     message.channel.send(args.join(" "));
   } else
 
-  if (command === "avatar") {
-    let oui;
-    if (message.mentions.users.size === 0) {
-      oui = message.author.avatarURL;
-    } else oui = message.mentions.users.first().avatarURL;
-    message.channel.send(oui);
-  } else
-
-  if (command === "id") {
-    let oui;
-    if (message.mentions.users.size === 0) {
-      oui = message.author.id;
-    } else {
-      oui = message.mentions.users.first().id;
+  if (command === 'userinformations') {
+    if (args.length > 0 && (message.mentions.users.size === 0 || message.mentions.users.first().bot === true)) return message.reply('Vous devez mentionner un **utilisateur** valide (@___)');
+    let targettedUser = message.author;
+    if (message.mentions.users.size > 0) {
+      targettedUser = message.mentions.users.first();
     }
-    message.channel.send(oui);
-  } else
+    let joursTableau = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    let moisTableau = ['Janvier', 'Février', 'Mars', 'Avril', 'Mais', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const embedToSend = new Discord.RichEmbed()
+      .setThumbnail(targettedUser.defaultAvatarURL)
+      .setColor(message.member.displayColor)
+      .setFooter('Brought to you by pickle', 'https://goo.gl/32dztg')
+      .setTitle(`Informations sur l'utilisateur ${targettedUser.username}`)
+      .addBlankField()
+      .addField('ID', targettedUser.id, true)
+      .addField('Tag', targettedUser.tag, true)
+      .addField('Utilisateur', targettedUser, true)
+      .addField('Nom par défaut', targettedUser.username, true)
+      .addBlankField()
+      .addField('Statut', targettedUser.presence.status, true);
+    if (targettedUser.presence.game === null) { embedToSend.addField('Joue à', 'rien', true) } else { embedToSend.addField('Joue à', targettedUser.presence.game.name, true) }
+    embedToSend.addField('Dernier message', targettedUser.lastMessage, true)
+      .addField('Compte crée le', `${joursTableau[(targettedUser.createdAt.getDay())-1]} ${targettedUser.createdAt.getDate()} ${moisTableau[targettedUser.createdAt.getMonth()]} à ${targettedUser.createdAt.getHours()}:${targettedUser.createdAt.getMinutes()}:${targettedUser.createdAt.getSeconds()}`, true)
+      .addBlankField()
+      .setImage(targettedUser.displayAvatarURL);
 
-  if (command === "username") {
-    let oui;
-    if (message.mentions.users.size === 0) {
-      oui = message.author.username;
-    } else oui = message.mentions.users.first().username;
-    message.channel.send(oui);
-  }
+    message.delete();
+    message.channel.send(embedToSend)
+  } else
 
   if (command === 'kick') {
     if (!message.member.roles.has(modRole.id)) return message.reply('vous n\'avez pas la permission d\'utiliser cette commande.') //changer les ID des rôles

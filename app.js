@@ -9,13 +9,14 @@ const client = new Discord.Client();
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.username}!`);
   client.channels.find('name', 'bot').send(`${client.user.username} s\'est connecté`);
+  client.user.setGame('Ready to fuck you up!');
 });
 
 client.on('disconnect', () => {
   console.log(`${client.user.username} has disconnected!`);
 });
 
-client.on('message', message => {
+client.on("message", async message => {
   if (message.tts) {
     if (message.content.length > 30) {
       message.delete()

@@ -79,21 +79,53 @@ client.on("message", async message => {
     message.delete();
   } else
 
-  if (command === 'purge') { //ajouter test avec les réactions pour confirmer la demande de purge
-    if (args.length > 0) {} else {
-      return message.reply(`Il faut donner le nombre de messages à supprimer (min: \`${config.minPurgeLength}\` | max: \`${config.maxPurgeLength}\`)`);
-    }
+  if (command === 'purge') {
+    if (args.length <= 0 || args[0] < config.minPurgeLength || args[0] > config.maxPurgeLength) return message.reply(`Il faut donner un nombre entre \`${config.minPurgeLength}\` et \`${config.maxPurgeLength}\` de messages à supprimer`)
 
-    if (args[0] < config.minPurgeLength) {
-      return message.reply(`Le nombre minimum de messages à supprimer est de \`${config.minPurgeLength}\``);
-    } else if (args[0] > config.maxPurgeLength) {
-      return message.reply(`Le nombre maximum de messages à supprimer est de \`${config.maxPurgeLength}\``);
-    }
+    message.channel.send(`Vous allez supprimer \`${args[0]}\` messages (sans compter la commande et ce message)`, { reply: message.author })
+      .then(msg => {
+        msg.react('🚫').then(x => {
+          msg.react('✅').then(y => {
+            const collector = msg.createReactionCollector((reaction, user) => {
+              if ((reaction.emoji.name === '🚫' || reaction.emoji.name === '✅') && user.id === message.author.id) {
+                return true;
+              }
+            }, { time: 15000 });
+            collector.on('collect', reaction => {
+              if (reaction.emoji.name === '🚫' && reaction.count > 1) {
+                console.log('NON');
+                msg.delete();
+                message.delete();
+                return;
+              }
+              if (reaction.emoji.name === '✅' && reaction.count > 1) {
+                console.log('OUI');
+                msg.delete().then(z1 => {
+                  message.delete().then(z2 => {
+                    message.channel.fetchMessages({
+                        limit: args[0]
+                      })
+                      .then(messages => message.channel.bulkDelete(messages));
+                  })
+                })
 
-    message.channel.fetchMessages({
-        limit: args[0]
-      })
-      .then(messages => message.channel.bulkDelete(messages)); //message.reply(`\`${messages.length}\` messages supprimés`));
+              }
+            });
+            collector.on('end', collected => {
+              if (collected.size < 1) {
+                message.channel.send('Pas de réponse détectée')
+                  .then(m => {
+                    setTimeout(function() {
+                      m.delete();
+                      msg.delete();
+                      message.delete();
+                    }, 2000);
+                  })
+              }
+            });
+          })
+        })
+      });
   } else
 
   if (command === 'playcancer') {

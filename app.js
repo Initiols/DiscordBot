@@ -239,7 +239,9 @@ client.on("message", async message => {
       })
   } else
 
-  if (command === 'testingthings') {} else
+  if (command === 'testingthings') {
+    // yup thats useless af
+  } else
 
   if (command === 'testtts') {
     message.channel.send('TOPKEK', { tts: true })

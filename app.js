@@ -126,7 +126,8 @@ client.on("message", async message => {
 
   if (command === 'play') {
     const voiceChannel = message.member.voiceChannel;
-    if (!voiceChannel) return message.reply(`Please be in a voice channel first!`);
+    if (!voiceChannel) return message.reply('Il faut que vous soyez dans un channel vocal popur exécuter cette commande');
+    if (args.length <= 0 || !args[0].startsWith('https://www.youtube.com/watch?v=')) return message.reply('Il faut donner le lien d\'une vidéo YouTube');
     voiceChannel.join()
       .then(connnection => {
         const stream = ytdl("https://www.youtube.com/watch?v=dQw4w9WgXcQ", {

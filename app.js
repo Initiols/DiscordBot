@@ -17,18 +17,6 @@ client.on('disconnect', () => {
 });
 
 client.on("message", async message => {
-  if (message.tts) {
-    if (message.content.length > 30) {
-      message.delete()
-      message.reply('NO CANCER PLEASE (pas de /tts a plus de 30 charactères)')
-      // message.reply('Vous ne pouvez plus envoyer de /tts pendant les 5 prochaines minutes.')
-      // message.member.removeRole('281768979033358338'); //changer les ID des rôles
-      // setTimeout(function() {
-      //   message.member.addRole('281768979033358338'); //changer les ID des rôles
-      // }, 300000); //ajouter un await pour envoyer un message @user quand il retrouve le rôle
-    }
-  }
-
   if (message.guild.id === '378232019102072833' && message.channel.name === 'screenshots') {
     if (message.attachments.size === 0) {
       message.react('🚫')

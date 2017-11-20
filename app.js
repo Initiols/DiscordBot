@@ -52,7 +52,7 @@ client.on("message", async message => {
 
   if (command === "ping") { //Rich Embed?🏓
     const m = await message.channel.send("Ping?");
-    m.edit(`Pong! La latence est de ${m.createdTimestamp - message.createdTimestamp}ms. La latence de l'API est ${Math.round(client.ping)}ms`);
+    m.edit(`Pong! La latence du bot est de ${m.createdTimestamp - message.createdTimestamp}ms. La latence de l'API est ${Math.round(client.ping)}ms`);
   }
 
   if (command === 'messagetoembed') {

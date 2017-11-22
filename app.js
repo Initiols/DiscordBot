@@ -177,6 +177,7 @@ client.on("message", async message => {
   } else
 
   if (command === "say") {
+    message.delete();
     message.channel.send(args.join(" "));
   } else
 
@@ -186,8 +187,14 @@ client.on("message", async message => {
     if (message.mentions.users.size > 0) {
       targettedUser = message.mentions.users.first();
     }
-    let joursTableau = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
-    let moisTableau = ['Janvier', 'Février', 'Mars', 'Avril', 'Mais', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const joursTableau = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+    const moisTableau = ['Janvier', 'Février', 'Mars', 'Avril', 'Mais', 'Juin', 'Juillet', 'Aout', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+    const statusTableau = {
+      online: "Online",
+      idle: "Idle",
+      dnd: "Do Not Disturb",
+      offline: "Offline/Invisible"
+    };
     const embedToSend = new Discord.RichEmbed()
       .setThumbnail(targettedUser.defaultAvatarURL)
       .setColor(message.member.displayColor)
@@ -199,7 +206,7 @@ client.on("message", async message => {
       .addField('Utilisateur', targettedUser, true)
       .addField('Nom par défaut', targettedUser.username, true)
       .addBlankField()
-      .addField('Statut', targettedUser.presence.status, true);
+      .addField('Statut', statusTableau[targettedUser.presence.status], true);
     if (targettedUser.presence.game === null) { embedToSend.addField('Joue à', 'rien', true) } else { embedToSend.addField('Joue à', targettedUser.presence.game.name, true) }
     embedToSend.addField('Dernier message', targettedUser.lastMessage, true)
       .addField('Compte crée le', `${joursTableau[(targettedUser.createdAt.getDay())-1]} ${targettedUser.createdAt.getDate()} ${moisTableau[targettedUser.createdAt.getMonth()]} à ${targettedUser.createdAt.getHours()}:${targettedUser.createdAt.getMinutes()}:${targettedUser.createdAt.getSeconds()}`, true)
